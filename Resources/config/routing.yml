@@ -1,0 +1,43 @@
+monithome.home:
+    path:     /monithome
+    defaults: { _controller: ExtrablindMonitHomeBundle:Default:index }
+
+
+#
+# monithome.api.nodes.get:
+#     defaults: { _controller: ExtrablindMonitHomeBundle:API:Nodes:get }
+#     path:   /api/v1/nodes/get/
+#
+# monithome.api.sensor.action:
+#     defaults: { _controller: ExtrablindMonitHomeBundle:API:Sensors:action }
+#     path: /api/v1/sensor/action/
+#
+#
+# monithome.api.logs.get:
+#     defaults: { _controller: ExtrablindMonitHomeBundle:API:Logs:get }
+#     path: /api/v1/logs/get/{from}/{to}/
+nodes:
+    type:     rest
+    resource: Extrablind\MonitHomeBundle\Controller\API\NodesController
+    prefix:   /api/{version}
+    options:
+        i18n: false
+sensors:
+    type:     rest
+    resource: Extrablind\MonitHomeBundle\Controller\API\SensorsController
+    prefix:   /api/{version}
+    options:
+        i18n: false
+logs:
+    type:     rest
+    resource: Extrablind\MonitHomeBundle\Controller\API\LogsController
+    prefix:   /api/{version}
+    options:
+        i18n: false
+
+scenarios:
+    type:     rest
+    resource: Extrablind\MonitHomeBundle\Controller\API\ScenariosController
+    prefix:   /api/{version}
+    options:
+        i18n: false

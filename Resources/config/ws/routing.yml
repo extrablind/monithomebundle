@@ -1,0 +1,9 @@
+monithome_push_topic:
+    channel: monithome/push
+    handler:
+        callback: 'monithome.push.topic' #related to the getName() of your topic
+
+monithome_input_topic:
+    channel: monithome/input
+    handler:
+        callback: 'monithome.input.topic' #related to the getName() of your topic

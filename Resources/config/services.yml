@@ -1,0 +1,164 @@
+services:
+    monithome_mysensors_message:
+        class: Extrablind\MonitHomeBundle\Services\MySensors\Message
+        arguments: ["@monithome_my_sensors_protocol", "@monithome.mysensors.normalizer"]
+        public: true
+
+    monithome_my_sensors_protocol:
+        class: Extrablind\MonitHomeBundle\Services\MySensors\Protocol
+        arguments: []
+        public: true
+
+    monithome.mysensors.normalizer:
+        class: Extrablind\MonitHomeBundle\Services\MySensors\Normalizer
+        arguments: ['@monithome_my_sensors_protocol']
+        public: true
+
+    monithome.log.transformer:
+        class: Extrablind\MonitHomeBundle\Services\MySensors\LogTransformer
+        arguments: []
+        public: true
+    monithome.log.formatter.elastic_gantt:
+        class: Extrablind\MonitHomeBundle\Services\Formatters\ElasticGanttFormatter
+        arguments: []
+        public: true
+    monithome.log.formatter.fullcalendar:
+        class: Extrablind\MonitHomeBundle\Services\Formatters\FullcalendarFormatter
+        arguments: []
+        public: true
+    monithome.log.formatter.timeline:
+        class: Extrablind\MonitHomeBundle\Services\Formatters\ChartJsTimelineFormatter
+        arguments: []
+        public: true
+
+
+
+    # Gateways
+    monithome.gateway.usb:
+        class: Extrablind\MonitHomeBundle\Services\MySensors\Gateways\UsbGateway
+        arguments: ["@service_container"]
+        public: true
+
+    # File gateway for testing purpose
+    monithome.gateway.file:
+        class: Extrablind\MonitHomeBundle\Services\MySensors\Gateways\FileGateway
+        arguments: ["@service_container"]
+        public: true
+
+    # WebSockets
+    monithome.ws.main:
+        class: Extrablind\MonitHomeBundle\WebSockets\MySensors
+        arguments: ["@service_container"]
+        public: true
+
+    # Websocket event on doctrine persist
+    monithome.doctrine.postPerist:
+        class: Extrablind\MonitHomeBundle\Events\Doctrine\PostUpdateEvent
+        arguments: ["@service_container"]
+        tags:
+            - { name: doctrine.event_listener, event: postPersist }
+    # monithome.doctrine.subscriber:
+    #     class: Extrablind\MonitHomeBundle\Events\Doctrine\EventSubscriber
+    #     tags:
+    #        - { name: doctrine.event_subscriber }
+
+    gos_web_socket_server.client_event.listener:
+        class: Extrablind\MonitHomeBundle\Events\GosListener
+        tags:
+            - { name: kernel.event_listener, event: 'gos_web_socket.client_connected', method: onClientConnect }
+            - { name: kernel.event_listener, event: 'gos_web_socket.client_disconnected', method: onClientDisconnect }
+            #- { name: kernel.event_listener, event: 'gos_web_socket.client_error', method: onClientError }
+            #- { name: kernel.event_listener, event: 'gos_web_socket.server_launched', method: onServerStart }
+            #- { name: kernel.event_listener, event: 'gos_web_socket.client_rejected', method: onClientRejected }
+
+    # WEBSOCKETS
+    # A simple json wamp message formatter
+    monithome.ws.message:
+        class: Extrablind\MonitHomeBundle\WebSockets\WsMessage
+        arguments: []
+
+    # Topics
+    monithome.input.topic:
+        class: Extrablind\MonitHomeBundle\WebSockets\InputTopic
+        arguments:
+          - "@doctrine"
+          - "@monithome.ws.message"
+          - "@monithome.controller.sensor"
+          - "@monithome.controller.scenario"
+          - "@monithome.controller.logs"
+          - "@monithome.controller.events"
+          - "@monithome.controller.settings"
+        tags:
+            - { name: gos_web_socket.topic }
+    monithome.push.topic:
+        class: Extrablind\MonitHomeBundle\WebSockets\PushTopic
+        arguments: ["@doctrine", "@monithome.controller.sensor"]
+        tags:
+            - { name: gos_web_socket.topic }
+
+    # Helpers
+    monithome.helpers.scenario:
+        class: Extrablind\MonitHomeBundle\Helpers\ScenarioHelper
+        arguments: ["@doctrine", "@monithome_mysensors_message", "@monithome.gateway", "@monithome.mysensors.normalizer"]
+        public: true
+
+    # Events
+    monithome.new.message:
+      class:   Extrablind\MonitHomeBundle\Events\NewMessage\EventSubscriber
+      arguments: ["@doctrine", "@gos_web_socket.wamp.pusher", "@monithome.helpers.scenario"]
+      tags:
+          - { name: kernel.event_subscriber }
+    monithome.event.schedule_trigger:
+      class:   Extrablind\MonitHomeBundle\Events\ScheduleTrigger\EventSubscriber
+      arguments: ["@doctrine", "@gos_web_socket.wamp.pusher", "@service_container"]
+      tags:
+          - { name: kernel.event_subscriber }
+
+
+    # Controllers to be injected in topics
+    monithome.controller.events:
+      class:   Extrablind\MonitHomeBundle\Controller\WebSocket\EventsController
+      arguments: ["@service_container"]
+      public: true
+    monithome.controller.sensor:
+      class:   Extrablind\MonitHomeBundle\Controller\WebSocket\SensorsController
+      arguments: ["@service_container"]
+      public: true
+    monithome.controller.scenario:
+      class:   Extrablind\MonitHomeBundle\Controller\WebSocket\ScenariosController
+      arguments: ["@service_container"]
+      public: true
+    monithome.controller.logs:
+      class:   Extrablind\MonitHomeBundle\Controller\WebSocket\LogsController
+      arguments: ["@service_container"]
+      public: true
+    monithome.controller.settings:
+      class:  Extrablind\MonitHomeBundle\Controller\WebSocket\SettingsController
+      arguments: ["@service_container"]
+      public: true
+
+    # Helpers
+    monithome.helper.scenario:
+      class: Extrablind\MonitHomeBundle\Helpers\ScenarioHelper
+      arguments: ["@doctrine", "@monithome_mysensors_message", "@monithome.gateway"]
+      public: true
+
+
+    # Commands
+    monithome.command.daemon_start:
+        class: Extrablind\MonitHomeBundle\Command\DaemonStartCommand
+        arguments: ["@monithome.gateway", "@gos_web_socket.wamp.pusher", "@doctrine"]
+        tags: [console.command]
+        public: true
+
+    monithome.command.write:
+        class: Extrablind\MonitHomeBundle\Command\SendCommand
+        arguments: ["@monithome.gateway"]
+        tags: [console.command]
+        public: true
+
+    monithome.command.update_topology:
+        class: Extrablind\MonitHomeBundle\Command\UpdateTopologyCommand
+        arguments: []
+        tags: [console.command]
+        public: true

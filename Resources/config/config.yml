@@ -1,0 +1,2 @@
+parameters:
+  monithome.gateway.service: 'monithome.gateway.usb'

@@ -1,0 +1,131 @@
+nodes:
+  # NODE
+  # Represents a node (arduino type)
+  -
+    # Fixed id from arduino, declared in arduino sketch (double check here)
+    # No dynamic nodeId allocation implemented yet
+    # WIP : parse presentation message from gateway
+    id: 1
+    # Sketch name
+    name: Temp And Hum
+    # Description of the sensor
+    description:
+    # Identify the area of the node
+    place: Room 1
+    # All sensors attached to this node
+    sensors:
+      -
+        # Id of sensor given in arduino sketch (double check here)
+        id: 1
+        # MySensor sensor value type
+        type: S_TEMP
+        # A short title to identify node abilities
+        title: DHT11 Temp
+        # MySensors received command type
+        commandType: V_TEMP
+        # Long description of this sensor
+        description: DHT11 Temp sensor on pin xx
+        # As json string in db.
+        configuration:
+          # Unit identifier for returned value
+          unit: °
+          # font-awesome icon for this sensor without prefix (fa-)
+          icon: thermometer-full
+          log:
+            # Should we log this sensor ? on | off
+            status: on
+            # Modes :
+            # - temporality : log each xx min, value is dropped if receive and should not log, but sensor is updated in db
+            # - always : log every time a value is received
+            # - on change : NOT IMPLEMENTED : log value if previous value differs
+            mode: temporality
+            # If log mode is set to "temporality" : this must be filled up else delete all temporality array.
+            temporality:
+              # Every 3 min
+              every: 3
+              # WIP : NOT IMPLEMENTED yet : year, month, day, minute = y M d m
+              unit: m
+      -
+        id: 0
+        type: S_HUM
+        commandType: V_HUM
+        title: DHT11 Humidity
+        description: DHT11 Humidity on pin xx
+        configuration:
+          unit: "%"
+          icon: tint
+          log:
+            status: on
+            mode: temporality
+            temporality:
+              every: 3
+              unit: m
+
+
+  # NODE
+  -
+    id: 3
+    name: LED and Luminosity
+    description:
+    place: Bathroom
+    sensors:
+      -
+        id: 0
+        type: S_LIGHT_LEVEL
+        title: Photoresistor
+        commandType: V_LIGHT_LEVEL
+        description: Photoresistor on pin xx
+        configuration:
+          unit: "%"
+          icon: sun
+          log:
+            status: on
+            mode: always
+
+      -
+        id: 1
+        type: S_BINARY
+        title: Green LED
+        commandType: V_STATUS
+        description: LED activator on pin xx
+        configuration:
+          unit:
+          icon: lightbulb
+          log:
+            status: on
+            mode: always
+
+  # NODE
+  -
+    id: 4
+    name: Temp (ds18b20) and Relay
+    description:
+    place: Computer - room 2
+    sensors:
+      -
+        id: 1
+        type: S_TEMP
+        title: DS18B20 Temperature
+        commandType: V_TEMP
+        description: DS18B20 temperature sensor on pin xx
+        configuration:
+          unit: °
+          icon: thermometer-full
+          log:
+            status: on
+            mode: temporality
+            temporality:
+              every: 2
+              unit: m
+      -
+        id: 2
+        type: S_BINARY
+        commandType: V_STATUS
+        title: Fan actuator
+        description: Relay on pin xx to activate fans
+        configuration:
+          unit:
+          icon: toggle-on
+          log:
+            status: on
+            mode: always

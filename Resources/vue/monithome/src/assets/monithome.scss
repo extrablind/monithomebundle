@@ -1,0 +1,75 @@
+@import './vars';
+
+$base: #E40032;
+$bg:#002B36;
+$contrast: #1E434A;
+
+hr{
+  border-bottom:1px solid white;
+}
+
+.actions{
+  .scenario{
+
+  }
+  .sensor{
+    border-bottom: 1px dashed blue;
+    cursor: pointer;
+  }
+  .logic{
+    border-bottom: 1px dashed red;
+    cursor: pointer;
+  }
+  .value{
+    border-bottom: 1px dashed orange;
+    cursor: pointer;
+  }
+  .v-select{
+    border:1px solid white;
+    color : white
+  }
+}
+
+.scenario{
+  cursor:move;
+  .toggle{
+    cursor:pointer;
+    position: absolute;
+    float: left;
+    padding: 5px 7px 9px 14px;
+    width: 40px;
+    height: 39px;
+    font-size: 22px;
+    background-color: darken($base, 35);
+  }
+  h5{
+    span{
+      cursor:pointer;
+    }
+    small{
+      color: rgba(#fff, .7 )
+    }
+  }
+  .card-header{
+    padding-left: 60px;
+    background-color: darken($base, 30);
+    padding-left: 54px;
+    padding-top: 7px;
+    padding-bottom: 0px;
+    border:none;
+
+    .trigger{
+      position: relative;
+      top: -3px;
+      right: -16px;
+    }
+  }
+  .card-footer{
+    background-color: darken($base, 35);
+    padding: 7px;
+    border:none;
+  }
+  .card-body{
+    background-color: darken($base, 20);
+  }
+}

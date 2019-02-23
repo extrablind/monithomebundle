@@ -1,0 +1,13 @@
+{
+  "entrypoints": {
+    "monithome": {
+      "js": [
+        "/build/runtime.js",
+        "/build/monithome.js"
+      ],
+      "css": [
+        "/build/monithome.css"
+      ]
+    }
+  }
+}

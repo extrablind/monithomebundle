@@ -1,0 +1,22 @@
+{% extends '@ExtrablindMonitHome/base.html.twig' %}
+
+{% block javascripts %}
+<script>
+  window.wsUrl = '{{wsUrl}}';
+</script>
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+
+<script src="{{ asset('bundles/goswebsocket/js/vendor/autobahn.min.js') }}"></script>
+
+<link  href=/bundles/extrablindmonithome/build/monithome.css rel=stylesheet>
+<script src=/bundles/extrablindmonithome/build/runtime.js></script>
+<script src=/bundles/extrablindmonithome/build/monithome.js></script>
+
+{% endblock %}
+
+{% block body %}
+
+ <div id="app" class="row row-fluid"></div>
+
+{% endblock %}

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="{{ app.request.locale }}">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>
+    {% block title %}{% endblock %}
+  </title>
+  <link  href=https://bootswatch.com/4/solar/bootstrap.min.css rel=stylesheet>
+  {% block stylesheets %}{% endblock %}
+</head>
+
+<body>
+  {% block header %}
+  {% endblock %}
+
+  <div class="container-fluid">
+    {% block body %}
+    {% endblock %}
+  </div>
+
+  {% block javascripts %}
+  {% endblock %}
+
+</body>
+</html>
