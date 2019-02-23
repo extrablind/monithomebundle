@@ -1,8 +1,8 @@
 # MonitHomeBundle Documentation
 
 ### Note
-!!! This is a work in progress but working project !!!
-!!! Feel free to contribute !!!
+!!! This is a work in progress !!!
+Please report any bug, feel free to contribute
 
 ### What is this about ?
 * This symfony bundle is a controller for MySensors in early stage written in full php.
