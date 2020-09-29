@@ -1,7 +1,9 @@
 # MonitHomeBundle Documentation
 
 ### Note
-!!! This is a work in progress !!!
+!!! New controller as a standalone symfony/vuejs (one page app) is coming soon using mercure instead of websockets !!! 
+!!! This is no longer up to date. !!! 
+
 Please report any bug, feel free to contribute
 
 ### What is this about ?
