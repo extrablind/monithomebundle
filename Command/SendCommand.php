@@ -1,14 +1,5 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Extrablind\MonitHomeBundle\Command;
 
 use Extrablind\MonitHomeBundle\Services\MySensors\Gateways\GatewayInterface;
@@ -42,12 +33,12 @@ class SendCommand extends ContainerAwareCommand
     protected function initialize(InputInterface $input, OutputInterface $output)
     {
         $this->message = $this->getContainer()->get('monithome_mysensors_message');
-        $this->em = $this->getContainer()->get('doctrine')->getManager();
+        $this->em      = $this->getContainer()->get('doctrine')->getManager();
     }
 
     protected function interact(InputInterface $input, OutputInterface $output)
     {
-        $title = 'Send Command';
+        $title      = 'Send Command';
         $boundaries = str_repeat('=', \strlen($title));
         $output->writeln($boundaries);
         $output->writeln($title);
@@ -66,7 +57,7 @@ class SendCommand extends ContainerAwareCommand
     {
         $output = $this->getOutputStyles($output);
 
-        $m = (string) $input->getArgument('c')."\n";
+        $m       = (string) $input->getArgument('c')."\n";
         $message = $this->message->parse($m);
 
         $this->gateway->start();

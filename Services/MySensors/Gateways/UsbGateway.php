@@ -1,32 +1,23 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Extrablind\MonitHomeBundle\Services\MySensors\Gateways;
 
 use  Extrablind\MonitHomeBundle\Services\MySensors\Message;
 
 class UsbGateway implements GatewayInterface
 {
-    private $hasError = false;
+    private $hasError   = false;
     private $hasMessage = false;
-    private $message = '';
-    private $error = '';
-    private $dev = null;
-    public $input = '';
-    const SEPARATOR = "\n";
+    private $message    = '';
+    private $error      = '';
+    private $dev        = null;
+    public $input       = '';
+    const SEPARATOR     = "\n";
 
     public function __construct($container)
     {
         $this->container = $container;
-        $this->params = $this->container->getParameter('extrablind_monit_home')['gateway']['usb'];
+        $this->params    = $this->container->getParameter('extrablind_monit_home')['gateway']['usb'];
     }
 
     public function send(Message $message)
@@ -55,11 +46,11 @@ class UsbGateway implements GatewayInterface
         $this->dev = dio_open($this->params['device'], O_RDWR | O_NOCTTY | O_NONBLOCK);
         dio_fcntl($this->dev, F_SETFL, O_SYNC);
         dio_tcsetattr($this->dev, [
-    'baud' => $this->params['baudrate'],
-    'bits' => $this->params['bits'],
-    'stop' => $this->params['stop'],
-    'parity' => $this->params['parity'],
-  ]
+            'baud'   => $this->params['baudrate'],
+            'bits'   => $this->params['bits'],
+            'stop'   => $this->params['stop'],
+            'parity' => $this->params['parity'],
+        ]
 );
     }
 
@@ -93,7 +84,7 @@ class UsbGateway implements GatewayInterface
     public function read()
     {
         $this->hasMessage = false;
-        $char = (string) dio_read($this->dev, 1);
+        $char             = (string) dio_read($this->dev, 1);
 
         if (false === $char) {
             return;
@@ -104,8 +95,8 @@ class UsbGateway implements GatewayInterface
                 return;
             }
             $this->hasMessage = true;
-            $this->message = $this->input;
-            $this->input = '';
+            $this->message    = $this->input;
+            $this->input      = '';
         } else {
             $this->input .= $char;
         }

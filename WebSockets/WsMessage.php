@@ -1,14 +1,5 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Extrablind\MonitHomeBundle\WebSockets;
 
 class WsMessage
@@ -17,17 +8,17 @@ class WsMessage
     public $action;
     public $data;
 
-    const TYPE_ACK = 0;
-    const TYPE_PUSH = 1;
-    const TYPE_ACTION = 2;
+    const TYPE_ACK      = 0;
+    const TYPE_PUSH     = 1;
+    const TYPE_ACTION   = 2;
     const TYPE_RESPONSE = 3;
 
     private $types = [
-    self::TYPE_ACK => 'ack',
-    self::TYPE_PUSH => 'push',
-    self::TYPE_ACTION => 'action',
-    self::TYPE_RESPONSE => 'response',
-  ];
+        self::TYPE_ACK      => 'ack',
+        self::TYPE_PUSH     => 'push',
+        self::TYPE_ACTION   => 'action',
+        self::TYPE_RESPONSE => 'response',
+    ];
 
     public function __construct()
     {
@@ -44,12 +35,12 @@ class WsMessage
     public function build()
     {
         $set = [
-      'msg' => [
-        'type' => $this->getType(),
-        'action' => $this->getAction(),
-        'data' => $this->getData(),
-      ],
-    ];
+            'msg' => [
+                'type'   => $this->getType(),
+                'action' => $this->getAction(),
+                'data'   => $this->getData(),
+            ],
+        ];
         $this->reset();
 
         return $set;

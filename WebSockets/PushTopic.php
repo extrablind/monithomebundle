@@ -1,14 +1,5 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Extrablind\MonitHomeBundle\WebSockets;
 
 use Gos\Bundle\WebSocketBundle\Router\WampRequest;
@@ -21,16 +12,12 @@ class PushTopic implements TopicInterface, PushableTopicInterface
 {
     public function __construct($doctrine, $sensorsController)
     {
-        $this->em = $doctrine;
+        $this->em                = $doctrine;
         $this->sensorsController = $sensorsController;
     }
 
     /**
      * This will receive any Subscription requests for this topic.
-     *
-     * @param ConnectionInterface $connection
-     * @param Topic               $topic
-     * @param WampRequest         $request
      */
     public function onSubscribe(ConnectionInterface $connection, Topic $topic, WampRequest $request)
     {
@@ -40,10 +27,6 @@ class PushTopic implements TopicInterface, PushableTopicInterface
 
     /**
      * This will receive any UnSubscription requests for this topic.
-     *
-     * @param ConnectionInterface $connection
-     * @param Topic               $topic
-     * @param WampRequest         $request
      */
     public function onUnSubscribe(ConnectionInterface $connection, Topic $topic, WampRequest $request)
     {
@@ -54,12 +37,7 @@ class PushTopic implements TopicInterface, PushableTopicInterface
     /**
      * This will receive any Publish requests for this topic.
      *
-     * @param ConnectionInterface $connection
-     * @param Topic               $topic
-     * @param WampRequest         $request
      * @param $event
-     * @param array $exclude
-     * @param array $eligible
      *
      * @return mixed|void
      */
@@ -79,8 +57,6 @@ class PushTopic implements TopicInterface, PushableTopicInterface
     }
 
     /**
-     * @param Topic        $topic
-     * @param WampRequest  $request
      * @param array|string $data
      * @param string       $provider The name of pusher who push the data
      */

@@ -1,14 +1,5 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Extrablind\MonitHomeBundle\MonitHomeModules\Activators\RelayActivator\Form;
 
 use Symfony\Component\Form\AbstractType;
@@ -28,14 +19,14 @@ class BinaryType extends AbstractType
         $builder
             ->add('state', CheckboxType::class,
                 [
-                'mapped' => false,
-                'attr' => [
-                   'data-toggle' => 'toggle',
-                    'autofocus' => true,
-                ],
-                'required' => false,
-                'label' => 'state',
-            ])
+                    'mapped' => false,
+                    'attr'   => [
+                        'data-toggle' => 'toggle',
+                        'autofocus'   => true,
+                    ],
+                    'required' => false,
+                    'label'    => 'state',
+                ])
         ;
     }
 

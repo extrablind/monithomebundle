@@ -1,14 +1,5 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Extrablind\MonitHomeBundle\Controller\WebSocket;
 
 use Extrablind\MonitHomeBundle\Entity\Event;
@@ -25,7 +16,7 @@ class EventsController
     public function removeEvent($id)
     {
         $this->em = $this->container->get('doctrine')->getManager();
-        $event = $this->em->getRepository(Event::class)->find($id);
+        $event    = $this->em->getRepository(Event::class)->find($id);
         $this->em->remove($event);
         $this->em->flush();
 
@@ -57,7 +48,7 @@ class EventsController
             }
 
             $rrule = new RruleUtility();
-            $next = $rrule->getNextDateFromNow($rule);
+            $next  = $rrule->getNextDateFromNow($rule);
             // No next date,
             if (!$next) {
                 $dbEvent->setNextTrigger(new \DateTime('1970-01-01 00:00:00'));
@@ -82,7 +73,7 @@ class EventsController
             $this->em->persist($dbEvent);
             $this->em->flush();
             // Put id in event object
-            $e = $dbEvent->getEvent();
+            $e       = $dbEvent->getEvent();
             $e['id'] = $dbEvent->getId();
             $dbEvent->setEvent($e);
             $this->em->persist($dbEvent);

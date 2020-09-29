@@ -1,14 +1,5 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Extrablind\MonitHomeBundle\Controller\API;
 
 use Extrablind\MonitHomeBundle\Entity\Sensor;
@@ -25,17 +16,17 @@ class SensorsController extends FOSRestController
      */
     public function setSensorAction(Request $request)
     {
-        $sensor = $request->request->get('sensor');
-        $node = $request->request->get('node');
+        $sensor  = $request->request->get('sensor');
+        $node    = $request->request->get('node');
         $message = $this->get('monithome_mysensors_message');
         $gateway = $this->get('monithome.gateway');
 
-        $message->nodeId = $node['nodeId'];
+        $message->nodeId        = $node['nodeId'];
         $message->childSensorId = $sensor['sensorId'];
-        $message->command = 'set';
-        $message->ack = true;
-        $message->type = $sensor['sensorCommandType'];
-        $message->payload = $sensor['value'];
+        $message->command       = 'set';
+        $message->ack           = true;
+        $message->type          = $sensor['sensorCommandType'];
+        $message->payload       = $sensor['value'];
 
         $gateway->start();
         $gateway->send($message);

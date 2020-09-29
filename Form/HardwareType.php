@@ -1,14 +1,5 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Extrablind\MonitHomeBundle\Form;
 
 use Extrablind\MonitHomeBundle\Entity\Hardware;
@@ -27,35 +18,35 @@ class HardwareType extends AbstractType
     ->add('name',
     \Symfony\Component\Form\Extension\Core\Type\TextType::class,
     [
-      'attr' => [
-//        'readonly' => true,
-        'autofocus' => true, ],
+        'attr' => [
+            //        'readonly' => true,
+            'autofocus' => true, ],
         'label' => 'label.name',
-      ])
+    ])
       ->add('description',
       \Symfony\Component\Form\Extension\Core\Type\TextareaType::class,
       [
-        'label' => 'label.description',
+          'label' => 'label.description',
       ])
       ->add('connector',
       \Symfony\Component\Form\Extension\Core\Type\TextType::class,
       [
-        'required' => false,
-        'attr' => [
-          'readonly' => false,
-        ],
-        'label' => 'label.connector',
+          'required' => false,
+          'attr'     => [
+              'readonly' => false,
+          ],
+          'label' => 'label.connector',
       ])
       ->add('identifier',
       \Symfony\Component\Form\Extension\Core\Type\TextType::class,
       [
-        'label' => 'label.identifier',
+          'label' => 'label.identifier',
       ])
       ->add('active',
       \Symfony\Component\Form\Extension\Core\Type\CheckboxType::class,
       [
-        'label' => 'label.activation',
-        'required' => false,
+          'label'    => 'label.activation',
+          'required' => false,
       ])
       ;
     }
@@ -63,7 +54,7 @@ class HardwareType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-        'data_class' => Hardware::class,
-      ]);
+            'data_class' => Hardware::class,
+        ]);
     }
 }

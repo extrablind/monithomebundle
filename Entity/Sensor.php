@@ -1,14 +1,5 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Extrablind\MonitHomeBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -117,7 +108,7 @@ class Sensor
         $class = new \ReflectionClass(__CLASS__);
         foreach ($class->getMethods() as $method) {
             if ('get' === substr($method->name, 0, 3)) {
-                $propName = strtolower(substr($method->name, 3, 1)).substr($method->name, 4);
+                $propName          = strtolower(substr($method->name, 3, 1)).substr($method->name, 4);
                 $result[$propName] = $method->invoke($this);
             }
         }

@@ -1,14 +1,5 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Extrablind\MonitHomeBundle\Events\NewMessage;
 
 use Extrablind\MonitHomeBundle\Entity\Log;
@@ -25,21 +16,21 @@ class EventSubscriber implements EventSubscriberInterface
 
     public function __construct($doctrine, $wamp, $scenarioHelper)
     {
-        $this->em = $doctrine->getManager();
-        $this->wamp = $wamp;
+        $this->em             = $doctrine->getManager();
+        $this->wamp           = $wamp;
         $this->scenarioHelper = $scenarioHelper;
     }
 
     public static function getSubscribedEvents()
     {
         return [
-      NewMessageEvent::NAME => [
-        ['save', 10],
-        ['logValueInDb', 20],
-        //['treateScenarios', 99],
-        ['debug', 100],
-      ],
-    ];
+            NewMessageEvent::NAME => [
+                ['save', 10],
+                ['logValueInDb', 20],
+                //['treateScenarios', 99],
+                ['debug', 100],
+            ],
+        ];
     }
 
     public function treateScenarios()
@@ -85,8 +76,8 @@ class EventSubscriber implements EventSubscriberInterface
           $lastLog = new \DateTime('1970-01-01 00:00:00');
       }
       // $unit = $conf['log']['temporality']['unit'];
-      $now = new \DateTime();
-      $diff = $lastLog->diff($now);
+      $now     = new \DateTime();
+      $diff    = $lastLog->diff($now);
       $minutes = ($diff->days * 24 * 60) + ($diff->h * 60) + $diff->i;
 
       return $minutes >= $conf['log']['temporality']['every'];
@@ -102,10 +93,10 @@ class EventSubscriber implements EventSubscriberInterface
             return;
         }
         $this->extract($event);
-        $date = date('Y-m-d H:i:s');
+        $date    = date('Y-m-d H:i:s');
         $message = $this->message;
-        $sensor = $this->sensor;
-        $node = $this->node;
+        $sensor  = $this->sensor;
+        $node    = $this->node;
 
         if (!$message) {
             return;
@@ -231,12 +222,12 @@ class EventSubscriber implements EventSubscriberInterface
         $this->treateScenarios();
         // Push
         $s = [
-      'id' => $this->sensor->getId(),
-      'value' => $this->message->payload,
-      'updated' => [
-        'date' => $this->sensor->getUpdated()->format('Y-m-d H:i:s'),
-      ],
-    ];
+            'id'      => $this->sensor->getId(),
+            'value'   => $this->message->payload,
+            'updated' => [
+                'date' => $this->sensor->getUpdated()->format('Y-m-d H:i:s'),
+            ],
+        ];
         $this->wamp->push(['msg' => ['type' => 'push', 'action' => 'updateSensor', 'data' => $s]], 'monithome_push_topic');
     }
 }

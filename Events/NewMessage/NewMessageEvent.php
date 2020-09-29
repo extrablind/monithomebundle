@@ -1,14 +1,5 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Extrablind\MonitHomeBundle\Events\NewMessage;
 
 use Extrablind\MonitHomeBundle\Services\MySensors\Message;
@@ -21,7 +12,7 @@ class NewMessageEvent extends Event
     public function __construct(Message $message, $output = null)
     {
         $this->message = $message;
-        $this->output = $output;
+        $this->output  = $output;
     }
 
     public function getMessage()

@@ -1,14 +1,5 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Extrablind\MonitHomeBundle\Services\MySensors;
 
 class LogTransformer
@@ -42,7 +33,7 @@ class LogTransformer
     public function transform($logs)
     {
         $datasets = [];
-        $colors = [];
+        $colors   = [];
         foreach ($logs as $k => $log) {
             // Assign color
             if (!isset($colors[$log['id']])) {
@@ -50,28 +41,28 @@ class LogTransformer
             }
             // Init
             $sensorId = $log['id'];
-            $name = $log['title'].' - '.$log['place'].' - '.$log['sensorValueType'];
-            $date = $log['created']->format('Y-m-d H:i:s');
-            $uniqId = uniqid();
+            $name     = $log['title'].' - '.$log['place'].' - '.$log['sensorValueType'];
+            $date     = $log['created']->format('Y-m-d H:i:s');
+            $uniqId   = uniqid();
             // Values
             $datasets[$sensorId]['data'][$uniqId]['y'] = $log['value'];
             $datasets[$sensorId]['data'][$uniqId]['x'] = $date;
-            $datasets[$sensorId]['data'] = array_values($datasets[$sensorId]['data']);
+            $datasets[$sensorId]['data']               = array_values($datasets[$sensorId]['data']);
             // Infos on distribution
             $datasets[$sensorId]['label'] = $name;
-            $datasets[$sensorId]['id'] = $sensorId;
+            $datasets[$sensorId]['id']    = $sensorId;
             // Graphic UI
             $datasets[$sensorId]['backgroundColor'] = $colors[$sensorId];
-            $datasets[$sensorId]['fill'] = $this->fill;
-            $datasets[$sensorId]['spanGaps'] = true;
-            $datasets[$sensorId]['borderColor'] = $colors[$sensorId];
+            $datasets[$sensorId]['fill']            = $this->fill;
+            $datasets[$sensorId]['spanGaps']        = true;
+            $datasets[$sensorId]['borderColor']     = $colors[$sensorId];
 
             if ($this->step) {
                 $datasets[$sensorId]['steppedLine'] = true;
             }
         }
         $datasets = array_values($datasets);
-        $return = ['datasets' => $datasets];
+        $return   = ['datasets' => $datasets];
 
         return $return;
     }

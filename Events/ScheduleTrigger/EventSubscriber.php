@@ -1,14 +1,5 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Extrablind\MonitHomeBundle\Events\ScheduleTrigger;
 
 use Extrablind\MonitHomeBundle\Entity\Sensor;
@@ -20,25 +11,25 @@ class EventSubscriber implements EventSubscriberInterface
 {
     public function __construct($doctrine, $wamp, $container)
     {
-        $this->em = $doctrine->getManager();
-        $this->wamp = $wamp;
+        $this->em        = $doctrine->getManager();
+        $this->wamp      = $wamp;
         $this->container = $container;
     }
 
     public static function getSubscribedEvents()
     {
         return [
-      ScheduleTriggerEvent::NAME => [
-        ['trigger', 1],
-      ],
-    ];
+            ScheduleTriggerEvent::NAME => [
+                ['trigger', 1],
+            ],
+        ];
     }
 
     public function trigger(ScheduleTriggerEvent $event)
     {
         foreach ($event->events as $evt) {
             $rrule = new RruleUtility();
-            $next = $rrule->getNextDateFromNow($evt->getRule(), 1);
+            $next  = $rrule->getNextDateFromNow($evt->getRule(), 1);
 
             // No next date,
             if (!$next) {
@@ -51,20 +42,20 @@ class EventSubscriber implements EventSubscriberInterface
             $next->setTimezone(new \DateTimeZone('Europe/Paris'));
 
             // TODO:  This should be injected !!
-            $message = $this->container->get('monithome_mysensors_message');
-            $gateway = $this->container->get('monithome.gateway');
+            $message  = $this->container->get('monithome_mysensors_message');
+            $gateway  = $this->container->get('monithome.gateway');
             $scenario = $evt->getScenario();
             // Do actions
             // Do not start gateway, gateway already started we are in loop
             foreach ($scenario->getActions() as $action) {
                 $sensor = $this->em->getRepository(Sensor::class)->findOneBy(['id' => $action['sensor']]);
                 // Add conditions here
-                $message->nodeId = $sensor->getNode()->getNodeId();
+                $message->nodeId        = $sensor->getNode()->getNodeId();
                 $message->childSensorId = $sensor->getSensorId();
-                $message->command = 'set';
-                $message->ack = true;
-                $message->type = $sensor->getSensorValueType();
-                $message->payload = $action['value'];
+                $message->command       = 'set';
+                $message->ack           = true;
+                $message->type          = $sensor->getSensorValueType();
+                $message->payload       = $action['value'];
                 $gateway->send($message);
             }
             $evt

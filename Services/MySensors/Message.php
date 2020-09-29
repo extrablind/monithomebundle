@@ -1,14 +1,5 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Extrablind\MonitHomeBundle\Services\MySensors;
 
 class Message
@@ -21,14 +12,14 @@ class Message
     public $payload;
     public $log;
     public $isBuilded = false;
-    public $raw = '';
+    public $raw       = '';
 
     public $normalizer;
     public $protocol;
 
     public function __construct(Protocol $protocol, Normalizer $normalizer)
     {
-        $this->protocol = $protocol;
+        $this->protocol   = $protocol;
         $this->normalizer = $normalizer;
     }
 
@@ -48,15 +39,15 @@ class Message
 
     public function reset()
     {
-        $this->nodeId = null;
+        $this->nodeId        = null;
         $this->childSensorId = null;
-        $this->command = null;
-        $this->ack = null;
-        $this->type = null;
-        $this->payload = null;
-        $this->log = null;
-        $this->isBuilded = false;
-        $this->raw = null;
+        $this->command       = null;
+        $this->ack           = null;
+        $this->type          = null;
+        $this->payload       = null;
+        $this->log           = null;
+        $this->isBuilded     = false;
+        $this->raw           = null;
     }
 
     public function getCommandType()
@@ -68,14 +59,14 @@ class Message
 
     public function build()
     {
-        $command['node-id'] = (string) $this->nodeId;
+        $command['node-id']         = (string) $this->nodeId;
         $command['child-sensor-id'] = (string) $this->childSensorId;
-        $command['command'] = (string) $this->protocol->find('COMMANDS', $this->command);
-        $command['ack'] = (int) $this->ack;
-        $command['type'] = (string) $this->getCommandType();
-        $command['payload'] = $this->normalizer->encodeFromValueType($this->payload, $this->type);
-        $command = (string) implode(';', $command);
-        $this->builded = $command;
+        $command['command']         = (string) $this->protocol->find('COMMANDS', $this->command);
+        $command['ack']             = (int) $this->ack;
+        $command['type']            = (string) $this->getCommandType();
+        $command['payload']         = $this->normalizer->encodeFromValueType($this->payload, $this->type);
+        $command                    = (string) implode(';', $command);
+        $this->builded              = $command;
 
         return $command;
     }
@@ -99,24 +90,24 @@ class Message
         }
         // Begin parse
         $messageArray = explode(';', $message);
-        $count = \count($messageArray);
+        $count        = \count($messageArray);
         // Message should be exact to 5 values separated by commas
         if (6 !== $count) {
             return false;
         }
         list($nodeId, $childSensorId, $command, $ack, $type, $payload) = $messageArray;
 
-        $this->message = trim($message);
-        $this->nodeId = (string) trim($nodeId);
+        $this->message       = trim($message);
+        $this->nodeId        = (string) trim($nodeId);
         $this->childSensorId = (string) $childSensorId;
-        $this->command = $this->protocol::COMMANDS[$command];
+        $this->command       = $this->protocol::COMMANDS[$command];
 
         // Guess constant array command type
         $this->commandType = (\in_array($this->command, ['set', 'req', 'stream'])) ? 'subtypes' : $this->command;
-        $this->ack = ($ack ? true : false);
-        $this->payload = (string) str_replace("\n", '', $payload);
-        $this->type = $this->protocol::TYPES[$this->commandType][$type];
-        $this->isLog = 'I_LOG_MESSAGE' === $this->type;
+        $this->ack         = ($ack ? true : false);
+        $this->payload     = (string) str_replace("\n", '', $payload);
+        $this->type        = $this->protocol::TYPES[$this->commandType][$type];
+        $this->isLog       = 'I_LOG_MESSAGE' === $this->type;
 
         if (!$this->isLog) {
             return $this;
@@ -136,7 +127,7 @@ class Message
             if (isset($m[1])) {
                 $payloadType = (int) $matches[(int) $m[1] + 1];
                 if (isset($this->protocol::PAYLOAD[$payloadType])) {
-                    $this->log = preg_replace('#{pt:\$(\d+)}#', $this->protocol::PAYLOAD[$payloadType], $this->log);
+                    $this->log         = preg_replace('#{pt:\$(\d+)}#', $this->protocol::PAYLOAD[$payloadType], $this->log);
                     $this->payloadType = $this->protocol::PAYLOAD[$payloadType];
                 }
             }

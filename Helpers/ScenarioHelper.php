@@ -1,14 +1,5 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Extrablind\MonitHomeBundle\Helpers;
 
 use Extrablind\MonitHomeBundle\Entity\Scenario;
@@ -20,9 +11,9 @@ class ScenarioHelper
 
     public function __construct($doctrine, $message, $gateway, $normalizer)
     {
-        $this->em = $doctrine->getManager();
-        $this->gateway = $gateway;
-        $this->message = $message;
+        $this->em         = $doctrine->getManager();
+        $this->gateway    = $gateway;
+        $this->message    = $message;
         $this->normalizer = $normalizer;
 
         return $this;
@@ -111,12 +102,12 @@ class ScenarioHelper
         foreach ($this->scenario->getActions() as $action) {
             $sensor = $this->em->getRepository(Sensor::class)->findOneBy(['id' => $action['sensor']]);
             // Add conditions here
-            $this->message->nodeId = $sensor->getNode()->getNodeId();
+            $this->message->nodeId        = $sensor->getNode()->getNodeId();
             $this->message->childSensorId = $sensor->getSensorId();
-            $this->message->command = 'set';
-            $this->message->ack = true;
-            $this->message->type = $sensor->getSensorValueType();
-            $this->message->payload = $action['value'];
+            $this->message->command       = 'set';
+            $this->message->ack           = true;
+            $this->message->type          = $sensor->getSensorValueType();
+            $this->message->payload       = $action['value'];
             $this->gateway->send($this->message);
         }
         // Update date for the last played sensor

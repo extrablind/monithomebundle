@@ -1,14 +1,5 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Extrablind\MonitHomeBundle\Command;
 
 use Extrablind\MonitHomeBundle\Entity\Event;
@@ -30,8 +21,8 @@ class DaemonStartCommand extends ContainerAwareCommand
     public function __construct(GatewayInterface $gateway, $pusher, $doctrine)
     {
         $this->gateway = $gateway;
-        $this->pusher = $pusher;
-        $this->em = $doctrine->getManager();
+        $this->pusher  = $pusher;
+        $this->em      = $doctrine->getManager();
         parent::__construct();
     }
 
@@ -47,12 +38,12 @@ class DaemonStartCommand extends ContainerAwareCommand
     protected function initialize(InputInterface $input, OutputInterface $output)
     {
         $this->message = $this->getContainer()->get('monithome_mysensors_message');
-        $this->em = $this->getContainer()->get('doctrine')->getManager();
+        $this->em      = $this->getContainer()->get('doctrine')->getManager();
     }
 
     protected function interact(InputInterface $input, OutputInterface $output)
     {
-        $title = 'Daemon Start';
+        $title      = 'Daemon Start';
         $boundaries = str_repeat('=', \strlen($title));
         $output->writeln($title);
         $output->writeln($boundaries);
@@ -79,8 +70,8 @@ class DaemonStartCommand extends ContainerAwareCommand
         $lastUpdate = time();
 
         while (true) {
-            $now = new \DateTime();
-            $format = $now->format('Y-m-d H:i:s');
+            $now      = new \DateTime();
+            $format   = $now->format('Y-m-d H:i:s');
             $triggers = $this->em->getRepository(Event::class)
       ->getByDate($format)->getResult();
 
@@ -106,7 +97,7 @@ class DaemonStartCommand extends ContainerAwareCommand
             }
 
             $gwMessage = $this->gateway->getMessage();
-            $message = $this->message->parse($gwMessage);
+            $message   = $this->message->parse($gwMessage);
             $output->writeln($gwMessage);
 
             // Parsed gateway message is invalid

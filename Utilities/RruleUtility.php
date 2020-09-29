@@ -1,14 +1,5 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Extrablind\MonitHomeBundle\Utilities;
 
 use RRule\RRule;
@@ -17,10 +8,10 @@ class RruleUtility
 {
     public function getNextDateFromNow($rruleString, $iteration = null, $limit = 10)
     {
-        $rrule = new RRule($rruleString);
-        $now = new \DateTime('now');
+        $rrule  = new RRule($rruleString);
+        $now    = new \DateTime('now');
         $future = new \DateTime('now +10 years');
-        $dates = $rrule->getOccurrencesBetween($now, $future, $limit);
+        $dates  = $rrule->getOccurrencesBetween($now, $future, $limit);
 
         foreach ($dates as $i => $utcDate) {
             if (null === $iteration) {

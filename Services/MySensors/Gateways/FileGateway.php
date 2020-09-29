@@ -1,14 +1,5 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Extrablind\MonitHomeBundle\Services\MySensors\Gateways;
 
 use  Extrablind\MonitHomeBundle\Services\MySensors\Message;
@@ -17,23 +8,23 @@ use Symfony\Component\Filesystem\Filesystem;
 class FileGateway implements GatewayInterface
 {
     // FILE should have a definition in parameters
-    private $FILE = '';
-    private $hasError = false;
+    private $FILE       = '';
+    private $hasError   = false;
     private $hasMessage = false;
-    private $message = '';
-    private $error = '';
-    private $input = '';
-    private $params = null;
-    private $fs = null;
-    const SEPARATOR = "\n";
+    private $message    = '';
+    private $error      = '';
+    private $input      = '';
+    private $params     = null;
+    private $fs         = null;
+    const SEPARATOR     = "\n";
 
     public function __construct($container)
     {
         $this->container = $container;
-        $this->params = $this->container->getParameter('extrablind_monit_home');
+        $this->params    = $this->container->getParameter('extrablind_monit_home');
 
         $this->FILE = $this->params['gateway']['file']['path'];
-        $this->fs = new Filesystem();
+        $this->fs   = new Filesystem();
         if (!$this->fs->exists($this->FILE)) {
             $this->fs->touch($this->FILE);
         }
@@ -84,7 +75,7 @@ class FileGateway implements GatewayInterface
     public function read()
     {
         $this->hasMessage = false;
-        $char = fgetc($this->file);
+        $char             = fgetc($this->file);
         if (false === $char) {
             $this->input = '';
 
@@ -103,7 +94,7 @@ class FileGateway implements GatewayInterface
                 return;
             }
             $this->hasMessage = true;
-            $this->input = '';
+            $this->input      = '';
         } else {
             $this->input .= $char;
         }

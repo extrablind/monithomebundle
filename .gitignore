@@ -4,3 +4,4 @@ yarn-error.log
 ###< symfony/webpack-encore-bundle ###
 
 Resources/vue/node_modules
+Resources/datas/gateway.txt

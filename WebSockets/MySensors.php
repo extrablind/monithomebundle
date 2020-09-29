@@ -1,14 +1,5 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Extrablind\MonitHomeBundle\WebSockets;
 
 use Extrablind\MonitHomeBundle\Entity\Node;
@@ -22,7 +13,7 @@ class MySensors implements MessageComponentInterface
     public function __construct($container)
     {
         $this->container = $container;
-        $this->clients = new \SplObjectStorage();
+        $this->clients   = new \SplObjectStorage();
     }
 
     public function onOpen(ConnectionInterface $conn)
@@ -50,7 +41,7 @@ class MySensors implements MessageComponentInterface
             return false;
         }
 
-        $action = $messageData->action ?? 'unknown';
+        $action  = $messageData->action ?? 'unknown';
         $message = $messageData->message ?? '';
 
         switch ($action) {
@@ -59,8 +50,8 @@ class MySensors implements MessageComponentInterface
       break;
       default:
       $data = [
-        'action' => 'error',
-        'message' => 'Action not set or not supported yet !',
+          'action'  => 'error',
+          'message' => 'Action not set or not supported yet !',
       ];
       break;
     }
@@ -77,8 +68,8 @@ class MySensors implements MessageComponentInterface
     ;
 
         return [
-      'action' => 'setNodes',
-      'message' => $nodes,
-    ];
+            'action'  => 'setNodes',
+            'message' => $nodes,
+        ];
     }
 }

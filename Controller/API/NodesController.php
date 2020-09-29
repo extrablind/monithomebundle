@@ -1,14 +1,5 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Extrablind\MonitHomeBundle\Controller\API;
 
 use Extrablind\MonitHomeBundle\Entity\Log;
@@ -27,14 +18,14 @@ class NodesController extends FOSRestController
     public function pushAction(Request $request)
     {
         $session = $this->container->get('session');
-        $from = $session->get('from');
-        $to = $session->get('to');
+        $from    = $session->get('from');
+        $to      = $session->get('to');
 
         $logs = $this->get('doctrine')->getRepository(Log::class)->getLogsBetween($from, $to);
 
         return new JsonResponse([
-      'sensors' => $sensors,
-    ]);
+            'sensors' => $sensors,
+        ]);
     }
 
     /**

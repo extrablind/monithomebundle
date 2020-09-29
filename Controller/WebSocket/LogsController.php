@@ -1,14 +1,5 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Extrablind\MonitHomeBundle\Controller\WebSocket;
 
 use Extrablind\MonitHomeBundle\Entity\Log;
@@ -24,9 +15,9 @@ class LogsController
 
     public function getLogsAction($from, $to)
     {
-        $this->transformer = $this->container->get('monithome.log.transformer');
-        $this->elasticGanttFormatter = $this->container->get('monithome.log.formatter.elastic_gantt');
-        $this->fullcalendarFormatter = $this->container->get('monithome.log.formatter.fullcalendar');
+        $this->transformer              = $this->container->get('monithome.log.transformer');
+        $this->elasticGanttFormatter    = $this->container->get('monithome.log.formatter.elastic_gantt');
+        $this->fullcalendarFormatter    = $this->container->get('monithome.log.formatter.fullcalendar');
         $this->chartJsTimelineFormatter = $this->container->get('monithome.log.formatter.timeline');
 
         $rawActuatorsDatas = $this->container->get('doctrine')
@@ -53,22 +44,22 @@ class LogsController
         }
         // Chartjs
         foreach ($sensors as $sensor) {
-            $datasSensor = $this->container->get('doctrine')->getRepository(Log::class)->getSensorDatasBetween($sensor, $from, $to);
+            $datasSensor     = $this->container->get('doctrine')->getRepository(Log::class)->getSensorDatasBetween($sensor, $from, $to);
             $datas[]['data'] = $this->chartJsTimelineFormatter->format($datasSensor);
-            $labels[] = $sensor->getTitle();
+            $labels[]        = $sensor->getTitle();
         }
         $history = [
-      'labels' => $labels,
-      'events' => $datas,
-    ];
-        $full = [];
+            'labels' => $labels,
+            'events' => $datas,
+        ];
+        $full             = [];
         $full['datasets'] = array_merge($scalars['datasets'], $actuators['datasets']);
-        $return = [
-      'full' => $full,
-      'history' => $history,
-      'actuators' => $actuators,
-      'scalars' => $scalars,
-    ];
+        $return           = [
+            'full'      => $full,
+            'history'   => $history,
+            'actuators' => $actuators,
+            'scalars'   => $scalars,
+        ];
 
         return $return;
     }

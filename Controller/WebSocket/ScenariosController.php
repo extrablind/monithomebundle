@@ -1,14 +1,5 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Extrablind\MonitHomeBundle\Controller\WebSocket;
 
 use Extrablind\MonitHomeBundle\Entity\Scenario;
@@ -23,8 +14,8 @@ class ScenariosController
 
     public function triggerScenarioAction($id)
     {
-        $message = $this->container->get('monithome_mysensors_message');
-        $gateway = $this->container->get('monithome.gateway');
+        $message  = $this->container->get('monithome_mysensors_message');
+        $gateway  = $this->container->get('monithome.gateway');
         $this->em = $this->container->get('doctrine')->getManager();
         $scenario = $this->em->getRepository(Scenario::class)->findOneBy(['id' => $id]);
 
@@ -32,12 +23,12 @@ class ScenariosController
         foreach ($scenario->getActions() as $action) {
             $sensor = $this->em->getRepository(Sensor::class)->findOneBy(['id' => $action['sensor']]);
             // Add conditions here
-            $message->nodeId = $sensor->getNode()->getNodeId();
+            $message->nodeId        = $sensor->getNode()->getNodeId();
             $message->childSensorId = $sensor->getSensorId();
-            $message->command = 'set';
-            $message->ack = true;
-            $message->type = $sensor->getSensorValueType();
-            $message->payload = $action['value'];
+            $message->command       = 'set';
+            $message->ack           = true;
+            $message->type          = $sensor->getSensorValueType();
+            $message->payload       = $action['value'];
             $gateway->start();
             $gateway->send($message);
             $gateway->stop();
@@ -48,12 +39,12 @@ class ScenariosController
         $this->em->flush();
 
         return [
-      'id' => $scenario->getId(),
-      'name' => $scenario->getName(),
-      'lastPlayed' => [
-        'date' => $scenario->getLastPlayed()->format('Y-m-d H:i:s'),
-      ],
-    ];
+            'id'         => $scenario->getId(),
+            'name'       => $scenario->getName(),
+            'lastPlayed' => [
+                'date' => $scenario->getLastPlayed()->format('Y-m-d H:i:s'),
+            ],
+        ];
     }
 
     public function changeScenariosOrderAction($scenarios)

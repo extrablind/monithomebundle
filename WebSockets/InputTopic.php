@@ -1,14 +1,5 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Extrablind\MonitHomeBundle\WebSockets;
 
 use Extrablind\MonitHomeBundle\Entity\Event;
@@ -25,22 +16,18 @@ class InputTopic implements TopicInterface
 {
     public function __construct($doctrine, $message, $sensorsController, $scenarioController, $logsController, $eventsController, $settingsController)
     {
-        $this->em = $doctrine;
+        $this->em  = $doctrine;
         $this->msg = $message;
 
-        $this->sensorsController = $sensorsController;
+        $this->sensorsController  = $sensorsController;
         $this->scenarioController = $scenarioController;
-        $this->logsController = $logsController;
-        $this->eventsController = $eventsController;
+        $this->logsController     = $logsController;
+        $this->eventsController   = $eventsController;
         $this->settingsController = $settingsController;
     }
 
     /**
      * This will receive any Subscription requests for this topic.
-     *
-     * @param ConnectionInterface $connection
-     * @param Topic               $topic
-     * @param WampRequest         $request
      */
     public function onSubscribe(ConnectionInterface $connection, Topic $topic, WampRequest $request)
     {
@@ -50,10 +37,6 @@ class InputTopic implements TopicInterface
 
     /**
      * This will receive any UnSubscription requests for this topic.
-     *
-     * @param ConnectionInterface $connection
-     * @param Topic               $topic
-     * @param WampRequest         $request
      */
     public function onUnSubscribe(ConnectionInterface $connection, Topic $topic, WampRequest $request)
     {
@@ -64,12 +47,7 @@ class InputTopic implements TopicInterface
     /**
      * This will receive any Publish requests for this topic.
      *
-     * @param ConnectionInterface $connection
-     * @param Topic               $topic
-     * @param WampRequest         $request
      * @param $event
-     * @param array $exclude
-     * @param array $eligible
      *
      * @return mixed|void
      */
@@ -150,8 +128,8 @@ class InputTopic implements TopicInterface
 
       case 'saveEvent':
       $paramEvent = $event['params']['event'];
-      $ruleParam = $event['params']['rule'];
-      $events = $this->eventsController->saveEvent($paramEvent, $ruleParam);
+      $ruleParam  = $event['params']['rule'];
+      $events     = $this->eventsController->saveEvent($paramEvent, $ruleParam);
 
       // Response : update event list
       $events = $this->em->getRepository(Event::class)->getAll()->getArrayResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -173,7 +151,7 @@ class InputTopic implements TopicInterface
       $sensor = $this->sensorsController->saveSensor($event['params']['sensor'], $event['params']['node']);
       // Return sensors
       $sensors = $this->em->getRepository(Sensor::class)->getSensors();
-      $msg = ['msg' => ['action' => 'setSensors', 'data' => $sensors]];
+      $msg     = ['msg' => ['action' => 'setSensors', 'data' => $sensors]];
       $topic->broadcast($msg, $exclude, $include);
 
       return;
@@ -217,21 +195,21 @@ class InputTopic implements TopicInterface
 
       case 'getLogs':
       $params = $event['params'];
-      $logs = $this->logsController->getLogsAction($params['from'], $params['to']);
-      $msg = ['msg' => ['action' => 'setLogs', 'data' => ['logs' => ($logs)]]];
+      $logs   = $this->logsController->getLogsAction($params['from'], $params['to']);
+      $msg    = ['msg' => ['action' => 'setLogs', 'data' => ['logs' => ($logs)]]];
       $topic->broadcast($msg, $exclude, $include);
       break;
 
       // Response sended to user demanding for it
       case 'getSensors':
       $sensors = $this->em->getRepository(Sensor::class)->getSensors();
-      $msg = ['msg' => ['action' => 'setSensors', 'data' => $sensors]];
+      $msg     = ['msg' => ['action' => 'setSensors', 'data' => $sensors]];
       $topic->broadcast($msg, $exclude, $include);
       break;
 
       case 'getNodes':
       $nodes = $this->em->getRepository(Node::class)->getNodes();
-      $msg = ['msg' => ['action' => 'setNodes', 'data' => $nodes]];
+      $msg   = ['msg' => ['action' => 'setNodes', 'data' => $nodes]];
       $topic->broadcast($msg, $exclude, $include);
       break;
     }

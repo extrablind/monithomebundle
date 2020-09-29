@@ -1,14 +1,5 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Extrablind\MonitHomeBundle\Services\Formatters;
 
 class FullcalendarFormatter
@@ -24,7 +15,7 @@ class FullcalendarFormatter
 
     public function transform($logs)
     {
-        $datas = [];
+        $datas  = [];
         $colors = [];
         //  { id: '1', resourceId: 'id', start: '2018-02-07T02:00:00', end: '2018-02-07T07:00:00', title: 'event 1' },
         foreach ($logs as $k => $log) {
@@ -33,9 +24,9 @@ class FullcalendarFormatter
                 $colors[$log['id']] = $this->getRandomColor();
             }
             // Values
-            $datas[$k]['id'] = uniqid();
+            $datas[$k]['id']         = uniqid();
             $datas[$k]['resourceId'] = $log['id'];
-            $datas[$k]['start'] = $log['created']->format('Y-m-d H:i:s');
+            $datas[$k]['start']      = $log['created']->format('Y-m-d H:i:s');
             // Search next different value to get duration of this task
             $l = \array_slice($logs, $k, \count($logs) - 1);
             foreach ($l as $next) {

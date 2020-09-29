@@ -1,14 +1,5 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Extrablind\MonitHomeBundle\Command;
 
 use Extrablind\MonitHomeBundle\Entity\Node;
@@ -43,14 +34,14 @@ class UpdateTopologyCommand extends ContainerAwareCommand
 
     protected function initialize(InputInterface $input, OutputInterface $output)
     {
-        $this->em = $this->getContainer()->get('doctrine')->getManager();
+        $this->em      = $this->getContainer()->get('doctrine')->getManager();
         $this->message = $this->getContainer()->get('monithome_mysensors_message');
-        $this->em = $this->getContainer()->get('doctrine')->getManager();
+        $this->em      = $this->getContainer()->get('doctrine')->getManager();
     }
 
     protected function interact(InputInterface $input, OutputInterface $output)
     {
-        $title = 'Update node and sensors topology network based on yml definition file';
+        $title      = 'Update node and sensors topology network based on yml definition file';
         $boundaries = str_repeat('=', \strlen($title));
         $output->writeln($boundaries);
         $output->writeln($title);
@@ -67,7 +58,7 @@ class UpdateTopologyCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $file = realpath($input->getArgument('path'));
+        $file     = realpath($input->getArgument('path'));
         $truncate = $input->getOption('truncate');
         if (!$file) {
             throw new \Exception('File not found !');
@@ -98,7 +89,7 @@ class UpdateTopologyCommand extends ContainerAwareCommand
             $n = $this->em->getRepository(Node::class)->findOneBy(['nodeId' => $node['id']]);
 
             // Update or create
-            $saveNode = (!$n) ? new Node() : $n;
+            $saveNode       = (!$n) ? new Node() : $n;
             $createOrUpdate = (!$n) ? 'Create' : 'Update';
             $output->writeln("<info>$createOrUpdate node : {$node['name']} - {$node['place']}</info>");
 
@@ -117,10 +108,10 @@ class UpdateTopologyCommand extends ContainerAwareCommand
             foreach ($node['sensors'] as $k => $sensor) {
                 // Find sensor with
                 $identifier = "{$node['id']}-{$sensor['id']}";
-                $s = $this->em->getRepository(Sensor::class)->findOneBy(['sensorUniqueIdentifier' => $identifier]);
+                $s          = $this->em->getRepository(Sensor::class)->findOneBy(['sensorUniqueIdentifier' => $identifier]);
 
                 // Update or create
-                $saveSensor = (!$s) ? new Sensor() : $s;
+                $saveSensor     = (!$s) ? new Sensor() : $s;
                 $createOrUpdate = (!$s) ? 'Create' : 'Update';
                 $output->writeln("$createOrUpdate sensor : {$sensor['title']}");
 

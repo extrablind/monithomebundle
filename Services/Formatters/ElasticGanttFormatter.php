@@ -1,14 +1,5 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Extrablind\MonitHomeBundle\Services\Formatters;
 
 class ElasticGanttFormatter
@@ -24,7 +15,7 @@ class ElasticGanttFormatter
 
     public function transform($logs, $id)
     {
-        $datas = [];
+        $datas  = [];
         $colors = [];
         foreach ($logs as $k => $log) {
             // Assign color
@@ -32,11 +23,11 @@ class ElasticGanttFormatter
                 $colors[$log['id']] = $this->getRandomColor();
             }
             // Values
-            $datas[$k]['id'] = $id;
-            $datas[$k]['start'] = $log['created']->getTimestamp();
-            $datas[$k]['value'] = $log['value'];
+            $datas[$k]['id']       = $id;
+            $datas[$k]['start']    = $log['created']->getTimestamp();
+            $datas[$k]['value']    = $log['value'];
             $datas[$k]['progress'] = 100;
-            $datas[$k]['type'] = 'task';
+            $datas[$k]['type']     = 'task';
             // Search next different value to get duration of this task
             $l = \array_slice($logs, $k, \count($logs) - 1);
             foreach ($l as $next) {
@@ -44,7 +35,7 @@ class ElasticGanttFormatter
                     unset($logs[$k]);
                     continue;
                 }
-                $diffSecs = $next['created']->getTimestamp() - $log['created']->getTimestamp();
+                $diffSecs              = $next['created']->getTimestamp() - $log['created']->getTimestamp();
                 $datas[$k]['duration'] = $diffSecs;
                 break;
             }

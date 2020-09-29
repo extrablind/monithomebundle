@@ -1,14 +1,5 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Extrablind\MonitHomeBundle\Controller\API;
 
 use Extrablind\MonitHomeBundle\Entity\Scenario;
@@ -31,20 +22,20 @@ class ScenariosController extends FOSRestController
     public function triggerScenarioAction(Request $request)
     {
         $scenario = $request->get('scenario');
-        $message = $this->get('monithome_mysensors_message');
-        $gateway = $this->get('monithome.gateway');
+        $message  = $this->get('monithome_mysensors_message');
+        $gateway  = $this->get('monithome.gateway');
         $this->em = $this->container->get('doctrine')->getManager();
 
         // Do actions
         foreach ($scenario['actions'] as $action) {
             $sensor = $this->em->getRepository(Sensor::class)->findOneBy(['id' => $action['sensor']]);
             // Add conditions here
-            $message->nodeId = $sensor->getNode()->getNodeId();
+            $message->nodeId        = $sensor->getNode()->getNodeId();
             $message->childSensorId = $sensor->getSensorId();
-            $message->command = 'set';
-            $message->ack = true;
-            $message->type = $sensor->getSensorValueType();
-            $message->payload = $action['value'];
+            $message->command       = 'set';
+            $message->ack           = true;
+            $message->type          = $sensor->getSensorValueType();
+            $message->payload       = $action['value'];
             $gateway->start();
             $gateway->send($message);
             $gateway->stop();
@@ -69,7 +60,7 @@ class ScenariosController extends FOSRestController
     public function changeScenariosOrderAction(Request $request)
     {
         $scenarios = $request->get('scenarios');
-        $this->em = $this->container->get('doctrine')->getManager();
+        $this->em  = $this->container->get('doctrine')->getManager();
         // Do actions$
         $repo = $this->em->getRepository(Scenario::class);
         foreach ($scenarios as $k => $scenario) {
@@ -79,7 +70,7 @@ class ScenariosController extends FOSRestController
             $this->em->flush();
         }
         $return = 'Ok';
-        $view = $this->view($return, 200);
+        $view   = $this->view($return, 200);
 
         return $this->handleView($view);
     }
@@ -93,7 +84,7 @@ class ScenariosController extends FOSRestController
     ->get('doctrine')->getManager();
 
         $scenario = $request->get('scenario');
-        $scenar = $this->get('doctrine')
+        $scenar   = $this->get('doctrine')
     ->getRepository(Scenario::class)->findOneBy(['id' => $scenario['id']]);
 
         $scenar
@@ -123,7 +114,7 @@ class ScenariosController extends FOSRestController
     ->get('doctrine')->getManager();
 
         $scenario = $request->get('scenario');
-        $scenar = $this->get('doctrine')->getRepository(Scenario::class)
+        $scenar   = $this->get('doctrine')->getRepository(Scenario::class)
     ->findOneBy(['id' => $scenario['id']]);
 
         $this->em->remove($scenar);
@@ -139,8 +130,8 @@ class ScenariosController extends FOSRestController
     {
         $this->em = $this->container->get('doctrine')->getManager();
         $scenario = $request->get('scenario');
-        $save = [];
-        $scenar = new Scenario();
+        $save     = [];
+        $scenar   = new Scenario();
         $scenar
     ->setName($scenario['name'])
     ->setType($scenario['type'])
@@ -161,7 +152,7 @@ class ScenariosController extends FOSRestController
 
     public function getScenariosAction(Request $request)
     {
-        $type = $request->get('type');
+        $type      = $request->get('type');
         $scenarios = $this->get('doctrine')
     ->getRepository(Scenario::class)
     ->getAll($type)

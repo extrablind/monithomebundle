@@ -1,14 +1,5 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Extrablind\MonitHomeBundle\Events;
 
 use Gos\Bundle\WebSocketBundle\Event\ClientErrorEvent;
@@ -20,8 +11,6 @@ class GosListener
 {
     /**
      * Called whenever a client connects.
-     *
-     * @param ClientEvent $event
      */
     public function onClientConnect(ClientEvent $event)
     {
@@ -32,8 +21,6 @@ class GosListener
 
     /**
      * Called whenever a client disconnects.
-     *
-     * @param ClientEvent $event
      */
     public function onClientDisconnect(ClientEvent $event)
     {
@@ -44,21 +31,17 @@ class GosListener
 
     /**
      * Called whenever a client errors.
-     *
-     * @param ClientErrorEvent $event
      */
     public function onClientError(ClientErrorEvent $event)
     {
         $conn = $event->getConnection();
-        $e = $event->getException();
+        $e    = $event->getException();
 
         echo 'connection error occurred: '.$e->getMessage().PHP_EOL;
     }
 
     /**
      * Called whenever server start.
-     *
-     * @param ServerEvent $event
      */
     public function onServerStart(ServerEvent $event)
     {
@@ -69,8 +52,6 @@ class GosListener
 
     /**
      * Called whenever client is rejected by application.
-     *
-     * @param ClientRejectedEvent $event
      */
     public function onClientRejected(ClientRejectedEvent $event)
     {

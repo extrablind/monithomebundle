@@ -1,14 +1,5 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Extrablind\MonitHomeBundle\Controller\WebSocket;
 
 use Extrablind\MonitHomeBundle\Entity\Node;
@@ -24,7 +15,7 @@ class SensorsController
     public function saveSensor($inputSensor, $inputNode)
     {
         $this->em = $this->container->get('doctrine')->getManager();
-        $node = $this->em->getRepository(Node::class)
+        $node     = $this->em->getRepository(Node::class)
         ->findOneBy(['id' => $inputNode['id']]);
 
         $sensor = new Sensor();
@@ -65,15 +56,15 @@ class SensorsController
     {
         $message = $this->container->get('monithome_mysensors_message');
         $gateway = $this->container->get('monithome.gateway');
-        $sensor = $this->container->get('doctrine')->getRepository(Sensor::class)
+        $sensor  = $this->container->get('doctrine')->getRepository(Sensor::class)
         ->findOneBy(['id' => $id]);
 
-        $message->nodeId = $sensor->getNode()->getNodeId();
+        $message->nodeId        = $sensor->getNode()->getNodeId();
         $message->childSensorId = $sensor->getSensorId();
-        $message->command = 'set';
-        $message->ack = true;
-        $message->type = $sensor->getSensorValueType();
-        $message->payload = $value;
+        $message->command       = 'set';
+        $message->ack           = true;
+        $message->type          = $sensor->getSensorValueType();
+        $message->payload       = $value;
 
         $gateway->start();
         $gateway->send($message);
