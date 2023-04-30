@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "autobahn": "^0.9.0",
-    "bootstrap": "^4.2.1",
+    "bootstrap": "^4.3.1",
     "bootstrap-vue": "^2.0.0-rc.11",
     "chartjs-chart-timeline": "^0.2.1",
     "font-awesome-picker": "^2.0.0",
